@@ -23,25 +23,30 @@ namespace Chance.MvvmCross.Plugins.UserInteraction.Droid
 			title, okButton, cancelButton);
 		}
 
-		public void Confirm(string message, Action<bool> answer, string title = null, string okButton = "OK", string cancelButton = "Cancel")
-		{
-			//Mvx.Resolve<IMvxMainThreadDispatcher>().RequestMainThreadAction();
-			Application.SynchronizationContext.Post(ignored => {
-				if (CurrentActivity == null) return;
-				new AlertDialog.Builder(CurrentActivity)
+        public void Confirm(string message, Action<bool> answer, string title = null, string okButton = "OK", string cancelButton = "Cancel")
+        {
+            Application.SynchronizationContext.Post(ignored =>
+            {
+                if (CurrentActivity == null)
+                    return;
+			
+                new AlertDialog.Builder(CurrentActivity)
 					.SetMessage(message)
-						.SetTitle(title)
-						.SetPositiveButton(okButton, delegate {
-							if (answer != null)
-								answer(true);
-						})
-						.SetNegativeButton(cancelButton, delegate {	
-							if (answer != null)
-								answer(false);
-						})
-						.Show();
-			}, null);
-		}
+    				.SetTitle(title)
+	    			.SetPositiveButton(okButton, delegate
+                    {
+                        if (answer != null)
+                            answer(true);
+                    })
+		    		.SetNegativeButton(cancelButton, delegate
+                    {	
+                        if (answer != null)
+                            answer(false);
+                    })
+			    	.SetOnCancelListener(new DismissListener<bool>(answer, false))
+				    .Show();
+            }, null);
+        }
 
 		public Task<bool> ConfirmAsync(string message, string title = "", string okButton = "OK", string cancelButton = "Cancel")
 		{
@@ -50,30 +55,36 @@ namespace Chance.MvvmCross.Plugins.UserInteraction.Droid
 			return tcs.Task;
 		}
 
-	    public void ConfirmThreeButtons(string message, Action<ConfirmThreeButtonsResponse> answer, string title = null, string positive = "Yes", string negative = "No",
-	        string neutral = "Maybe")
-	    {
-	        Application.SynchronizationContext.Post(ignored =>
+        public void ConfirmThreeButtons(string message, Action<ConfirmThreeButtonsResponse> answer, string title = null, string positive = "Yes", string negative = "No",
+                                        string neutral = "Maybe")
+        {
+            Application.SynchronizationContext.Post(ignored =>
             {
-                if (CurrentActivity == null) return;
+                if (CurrentActivity == null)
+                    return;
+
                 new AlertDialog.Builder(CurrentActivity)
-                    .SetMessage(message)
-                        .SetTitle(title)
-                        .SetPositiveButton(positive, delegate {
-                            if (answer != null)
-                                answer(ConfirmThreeButtonsResponse.Positive);
-                        })
-                        .SetNegativeButton(negative, delegate {
-                            if (answer != null)
-                                answer(ConfirmThreeButtonsResponse.Negative);
-                        })
-                        .SetNeutralButton(neutral, delegate {
-                            if (answer != null)
-                                answer(ConfirmThreeButtonsResponse.Neutral);
-                        })
-                        .Show();
+                			.SetMessage(message)
+	                        .SetTitle(title)
+	                        .SetPositiveButton(positive, delegate
+                            {
+                                if (answer != null)
+                                    answer(ConfirmThreeButtonsResponse.Positive);
+                            })
+	                        .SetNegativeButton(negative, delegate
+                            {
+                                if (answer != null)
+                                    answer(ConfirmThreeButtonsResponse.Negative);
+                            })
+	                        .SetNeutralButton(neutral, delegate
+                            {
+                                if (answer != null)
+                                    answer(ConfirmThreeButtonsResponse.Neutral);
+                            })
+	            			.SetOnCancelListener(new DismissListener<ConfirmThreeButtonsResponse>(answer, ConfirmThreeButtonsResponse.Negative))
+	                        .Show();
             }, null);
-	    }
+        }
 
         public Task<ConfirmThreeButtonsResponse> ConfirmThreeButtonsAsync(string message, string title = null, string positive = "Yes", string negative = "No",
             string neutral = "Maybe")

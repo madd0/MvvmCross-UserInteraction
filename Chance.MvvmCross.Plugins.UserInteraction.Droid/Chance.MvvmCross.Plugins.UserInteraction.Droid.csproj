@@ -49,6 +49,7 @@
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="UserInteraction.cs" />
     <Compile Include="Plugin.cs" />
+    <Compile Include="DismissListener{TResult}.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
