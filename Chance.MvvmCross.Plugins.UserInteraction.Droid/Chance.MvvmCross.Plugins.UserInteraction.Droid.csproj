@@ -50,6 +50,7 @@
     <Compile Include="UserInteraction.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="DismissListener{TResult}.cs" />
+    <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
